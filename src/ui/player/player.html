@@ -1,0 +1,87 @@
+<div class="flex flex-col gap-4 h-full min-h-0">
+  <div
+    #wrapperRef
+    class="relative border border-white/5 rounded overflow-hidden bg-black/40 flex-1 min-h-0 flex flex-col"
+  >
+    @if (dimensions(); as dims) {
+      <div #containerRef class="w-full shrink-0" [style.height.px]="dims.wave"></div>
+      <div
+        #timelineRef
+        class="w-full shrink-0 bg-black/60 overflow-hidden text-[10px] font-mono text-cyan-500/50 border-y border-white/5 h-5"
+      ></div>
+      <div
+        #spectogramRef
+        class="w-full flex-1"
+        [style.height.px]="dims.spec"
+        [style.filter]="spectrogramFilter()"
+      ></div>
+    }
+
+    @if (showHighlight() && totalAudioDuration() > 0 && dimensions()) {
+      <div
+        class="absolute top-0 bottom-0 border-x-2 border-rose-500/80 pointer-events-none bg-rose-500/5 z-40"
+        [style.left.%]="((label().start - startingTimeOfSnippet()) / totalAudioDuration()) * 100"
+        [style.width.%]="(labelDuration() / totalAudioDuration()) * 100"
+        [title]="label() | appLabel"
+      >
+        <span
+          class="absolute cursor-help z-50 pointer-events-auto top-2 left-1 text-[8px] text-rose-400 bg-black/60 px-1 rounded uppercase tracking-wider font-bold"
+        >
+          {{ label().code }}
+        </span>
+      </div>
+    }
+
+    @if (totalAudioDuration() > 0 && dimensions()) {
+      @for (lbl of otherLabelsInSnippet(); track lbl.code + $index) {
+        <div
+          class="absolute top-0 bottom-0 border-x border-orange-500/50 pointer-events-none bg-orange-500/20 z-40 overflow-hidden"
+          [style.left.%]="((lbl.start - startingTimeOfSnippet()) / totalAudioDuration()) * 100"
+          [style.width.%]="((lbl.end - lbl.start) / totalAudioDuration()) * 100"
+        >
+          <span
+            class="absolute cursor-help z-50 pointer-events-auto top-2 left-1 text-[8px] text-orange-400 bg-black/60 px-1 rounded uppercase tracking-wider font-bold"
+            [title]="lbl | appLabel"
+          >
+            {{ lbl.code }}
+          </span>
+        </div>
+      }
+    }
+  </div>
+
+  <div class="flex justify-center mt-2 shrink-0">
+    <button
+      (click)="togglePlay()"
+      class="bg-cyan-500 hover:bg-cyan-400 text-black rounded-full flex items-center justify-center transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] active:scale-95"
+    >
+      @if (isPlaying()) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-12"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM9 8.25a.75.75 0 0 0-.75.75v6c0 .414.336.75.75.75h.75a.75.75 0 0 0 .75-.75V9a.75.75 0 0 0-.75-.75H9Zm5.25 0a.75.75 0 0 0-.75.75v6c0 .414.336.75.75.75H15a.75.75 0 0 0 .75-.75V9a.75.75 0 0 0-.75-.75h-.75Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      } @else {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-12"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.983a1.125 1.125 0 0 1 0 1.966l-5.603 3.113A1.125 1.125 0 0 1 9 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      }
+    </button>
+  </div>
+</div>

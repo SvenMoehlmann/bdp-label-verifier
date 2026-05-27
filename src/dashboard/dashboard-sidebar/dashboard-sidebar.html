@@ -1,0 +1,67 @@
+<aside class="w-64 bg-black/40 border-r border-white/5 flex flex-col h-full shrink-0">
+  <div class="p-6 border-b border-white/5 flex flex-col gap-4">
+    <!-- Tab selection -->
+    <div class="flex bg-black/40 rounded-lg p-1 border border-white/10 shrink-0">
+      <button
+        (click)="activeTab.set('groups')"
+        [class]="
+          activeTab() === 'groups'
+            ? 'bg-cyan-500/20 text-cyan-400'
+            : 'text-slate-500 hover:text-white'
+        "
+        class="flex-1 px-3 py-1.5 rounded text-[10px] uppercase tracking-wide font-bold transition-all"
+      >
+        Groups
+      </button>
+      <button
+        (click)="activeTab.set('analysis')"
+        [class]="
+          activeTab() === 'analysis'
+            ? 'bg-cyan-500/20 text-cyan-400'
+            : 'text-slate-500 hover:text-white'
+        "
+        class="flex-1 px-3 py-1.5 rounded text-[10px] uppercase tracking-wide font-bold transition-all"
+      >
+        Analysis
+      </button>
+    </div>
+  </div>
+
+  <!-- Tab content -->
+  <nav class="flex-1 py-4 px-3 overflow-hidden flex flex-col">
+    @switch (activeTab()) {
+      @case ('groups') {
+        <div class="text-[9px] uppercase tracking-wider text-slate-600 mb-4 px-3 shrink-0">
+          Label Groups
+        </div>
+        <div class="space-y-1 flex-1 overflow-y-auto no-scrollbar pr-1">
+          @for (item of labelGroups() | keyvalue; track $index) {
+            <button
+              [attr.key]="item.key"
+              (click)="selectedLabelCode.set(item.key)"
+              class="w-full text-left px-3 py-3 flex items-center justify-between rounded-lg transition-colors border group hover:bg-white/5 border-transparent"
+              [class]="selectedLabelCode() === item.key
+                ? 'bg-cyan-500/10 border-cyan-500/30'
+                : 'hover:bg-white/5 border-transparent'"
+            >
+              <span class="text-xs font-medium truncate pr-2 text-slate-400">
+                {{ item.key }}
+              </span>
+              <span class="text-[10px] font-mono text-slate-500">
+                {{ item.value.length }}
+              </span>
+            </button>
+          }
+        </div>
+      }
+      @case ('analysis') {
+        Coming soon!
+      }
+    }
+  </nav>
+
+  <!-- Settings -->
+  <div class="p-4 border-t border-white/5 flex flex-col gap-4">
+    <app-settings-editor></app-settings-editor>
+  </div>
+</aside>

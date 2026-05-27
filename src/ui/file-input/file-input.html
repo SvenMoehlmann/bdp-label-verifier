@@ -1,0 +1,11 @@
+<input
+  type="file"
+  [accept]="accept()"
+  class="block w-full text-sm text-slate-400
+    file:mr-4 file:py-2 file:px-4
+    file:rounded file:border-0
+    file:text-[11px] file:uppercase file:tracking-widest file:font-bold
+    file:bg-white/10 file:text-white
+    hover:file:bg-white/20 cursor-pointer border border-white/5 rounded-lg p-2 bg-black/40"
+  (change)="selectFile($event)"
+/>

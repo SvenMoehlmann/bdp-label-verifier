@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AudioLabel } from '../parser/audio-label';
+import { AppAudioContext } from '../dashboard/app-audio-context';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +10,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('label-verifier');
+  constructor() {}
 }
