@@ -33,7 +33,7 @@ docker run -d -p 8080:80 --name label-validator label-validator
 ```
 and then accessed via: http://localhost:8080
 
-# Notice of Ai Usage
+## Notice of Ai Usage
 Ai was used for proof of concept beforehand.
 During the development it was used to:
 - style the components
