@@ -34,6 +34,11 @@ export class Dashboard {
     })
   }
 
+  setLabelToPlay(label: AudioLabel) {
+    this.selectedLabelCode.set(label.code);
+    this.selectedLabel.set(label);
+  }
+
   reset() {
     this.audioContext.reset();
 
