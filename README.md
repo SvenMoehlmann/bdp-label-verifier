@@ -35,4 +35,8 @@ and then accessed via: http://localhost:8080
 
 # Notice of Ai Usage
 Ai was used for proof of concept beforehand.
-During the development it was used to style the components, create wav-header and initializing the Waveplayer form the wavesurfer.js library.
+During the development it was used to:
+- style the components
+- create wav-header
+- initializing the Waveplayer form the wavesurfer.js library
+- write the outlier detection
