@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, inject, model, output, signal, viewChildren } from '@angular/core';
 import { SettingsEditor } from '../../settings/settings-editor/settings-editor';
 import { AppAudioContext } from '../app-audio-context';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,6 @@ import { AudioLabel } from '../../parser/audio-label';
   }
 })
 export class DashboardSidebar {
-
   readonly activeTab = signal<'groups' | 'analysis'>('groups');
   private readonly audioContext = inject(AppAudioContext);
 
@@ -36,6 +35,9 @@ export class DashboardSidebar {
 
   readonly selectedSpecificLabel = output<AudioLabel>();
 
+  readonly labelGroupRefs = viewChildren<ElementRef<HTMLButtonElement>>('labelGroup');
+  readonly suspectRefs = viewChildren<ElementRef<HTMLButtonElement>>('suspect');
+
   constructor() {
     effect(() => {
       const selectedSuspect = this.selectedSuspiciousLabel();
@@ -43,6 +45,52 @@ export class DashboardSidebar {
         this.selectedSpecificLabel.emit(selectedSuspect.label);
       }
     })
+
+    effect(() => {
+      if(this.activeTab() === 'groups') return;
+
+      const suspectedLabels = this.suspectedLabels();
+      if(!suspectedLabels || suspectedLabels.length === 0) return;
+
+      const selected = this.selectedSuspiciousLabel();
+      if(!selected) return;
+
+      const selectedIndex = suspectedLabels.indexOf(selected);
+      if(selectedIndex < 0 || selectedIndex >= suspectedLabels.length){
+        return;
+      }
+
+      const selectedElement = this.suspectRefs()[selectedIndex]
+      if(selectedElement) {
+        selectedElement.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        })
+      }
+    });
+
+    effect(() => {
+      if(this.activeTab() === 'analysis') return;
+
+      const labelCodes = this.labelCodes();
+      if(!labelCodes) return;
+
+      const selected = this.selectedLabelCode();
+      if(!selected) return;
+
+      const selectedIndex = labelCodes.indexOf(selected);
+      if(selectedIndex < 0 || selectedIndex >= labelCodes.length){
+        return;
+      }
+
+      const selectedElement = this.labelGroupRefs()[selectedIndex]
+      if(selectedElement) {
+        selectedElement.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        })
+      }
+    });
   }
 
   analyzeLabels() {

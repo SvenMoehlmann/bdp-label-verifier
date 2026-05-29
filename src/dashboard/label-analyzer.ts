@@ -21,6 +21,17 @@ export class LabelAnalyzer {
     const sampleRate = buffer.sampleRate;
 
     for (const [code, labelList] of labels.entries()) {
+      if(getClassification(code) === undefined) {
+        suspicious.push(...labelList.map<SuspiciousLabel>((l, index) => {
+          return {
+            label: l,
+            index,
+            reason: 'INVALID LABEL'
+          }
+        }));
+        continue;
+      }
+
       const featuresList: { index: number; label: AudioLabel; rms: number; zcr: number; duration: number }[] = [];
 
       for (let index = 0; index < labelList.length; index++) {
