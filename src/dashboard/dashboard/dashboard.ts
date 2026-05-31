@@ -8,10 +8,11 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TimestampPipe } from '../../ui/timestamp-pipe';
 import { AdjustmentExporter } from '../../label-adjustment/adjustment-exporter';
+import { LabelAdjustmentMenu } from '../../label-adjustment/label-adjustment-menu/label-adjustment-menu';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DashboardSidebar, SnippetPlayer, LabelPipe, FormsModule, TimestampPipe],
+  imports: [DashboardSidebar, SnippetPlayer, LabelPipe, FormsModule, TimestampPipe, LabelAdjustmentMenu],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

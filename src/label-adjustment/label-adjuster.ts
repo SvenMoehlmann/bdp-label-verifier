@@ -22,7 +22,21 @@ export class LabelAdjuster {
       throw new Error(`Unexpected Audiolabel. Label with id ${labelOrId} cannot be found in AudioContext`);
     }
 
-    this._labelsToFix.update(l => l.add(label.id));
+    this._labelsToFix.update(l => {
+      const newSet = new Set(l);
+      newSet.add(label.id);
+      return newSet;
+    });
+  }
+
+  removeFromToFix(labelOrId: AudioLabel | number) {
+    const labelId = typeof labelOrId === 'number' ? labelOrId : labelOrId.id;
+
+    this._labelsToFix.update(l => {
+      const newSet = new Set(l);
+      newSet.delete(labelId);
+      return newSet;
+    });
   }
 
   replaceLabel(labelOrId: AudioLabel | number, newCode: string) {
@@ -35,6 +49,19 @@ export class LabelAdjuster {
       throw new Error(`Unexpected new Code. Code "${newCode}" was not found in classification map`);
     }
 
-    this._labelReplacements.update(lr => lr.set(label.id, newCode));
+    this._labelReplacements.update(lr => {
+      const newSet = new Map(lr);
+      newSet.set(label.id, newCode);
+      return newSet;
+    });
+  }
+
+  removeReplacement(labelOrId: AudioLabel | number) {
+    const labelId = typeof labelOrId === 'number' ? labelOrId : labelOrId.id;
+    this._labelReplacements.update(lr => {
+      const newSet = new Map(lr);
+      newSet.delete(labelId);
+      return newSet;
+    });
   }
 }
