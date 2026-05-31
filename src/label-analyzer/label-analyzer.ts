@@ -1,17 +1,15 @@
-import { inject, Injectable, output } from '@angular/core';
-import { AppAudioContext } from './app-audio-context';
-import { signal } from 'wavesurfer.js/dist/reactive/store.js';
+import { inject, Injectable } from '@angular/core';
 import { AudioLabel } from '../parser/audio-label';
 import { SuspiciousLabel } from './suspicious-label';
-import { getClassification } from '../parser/classification';
-import { LabelPipe } from '../ui/label-pipe';
+import { AppAudioContext } from '../dashboard/app-audio-context';
+import { Classifier } from '../parser/classifier';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LabelAnalyzer {
   private readonly appAudioContext = inject(AppAudioContext);
-  private readonly labelPipe = new LabelPipe();
+  private readonly classifier = inject(Classifier);
 
   getSuspiciousLabels(): SuspiciousLabel[] {
     const suspicious: SuspiciousLabel[] = [];
@@ -21,7 +19,7 @@ export class LabelAnalyzer {
     const sampleRate = buffer.sampleRate;
 
     for (const [code, labelList] of labels.entries()) {
-      if(getClassification(code) === undefined) {
+      if(!this.classifier.isValidClassCode(code)) {
         suspicious.push(...labelList.map<SuspiciousLabel>((l, index) => {
           return {
             label: l,
@@ -126,13 +124,13 @@ export class LabelAnalyzer {
             const zcrZ = zcrStd > 0 ? Math.abs(feat.zcr - zcrMean) / zcrStd : 0;
 
             if (durZ > THRESHOLD) {
-              suspicious.push({ label: feat.label, index: feat.index, reason: `Duration outlier for group ${this.labelPipe.transform(code)}: ${feat.duration.toFixed(1)}s differs significantly from group avg (${durMean.toFixed(1)}s).` });
+              suspicious.push({ label: feat.label, index: feat.index, reason: `Duration outlier for group ${this.classifier.getTitleForClassCode(code, 'unkonwn')}: ${feat.duration.toFixed(1)}s differs significantly from group avg (${durMean.toFixed(1)}s).` });
             }
             if (rmsZ > THRESHOLD && rmsStd > 0.005) {
-              suspicious.push({ label: feat.label, index: feat.index, reason: `Amplitude (RMS) outlier for group ${this.labelPipe.transform(code)}: Sound intensity differs significantly from group average.` });
+              suspicious.push({ label: feat.label, index: feat.index, reason: `Amplitude (RMS) outlier for group ${this.classifier.getTitleForClassCode(code, 'unkonwn')}: Sound intensity differs significantly from group average.` });
             }
             if (zcrZ > THRESHOLD && zcrStd > 0.02) {
-              suspicious.push({ label: feat.label, index: feat.index, reason: `Timbre (ZCR) outlier for group ${this.labelPipe.transform(code)}: Frequency content (ZCR: ${feat.zcr.toFixed(2)}) differs significantly from group avg (${zcrMean.toFixed(2)}).` });
+              suspicious.push({ label: feat.label, index: feat.index, reason: `Timbre (ZCR) outlier for group ${this.classifier.getTitleForClassCode(code, 'unkonwn')}: Frequency content (ZCR: ${feat.zcr.toFixed(2)}) differs significantly from group avg (${zcrMean.toFixed(2)}).` });
             }
         }
       }

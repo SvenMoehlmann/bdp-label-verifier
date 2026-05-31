@@ -3,9 +3,9 @@ import { SettingsEditor } from '../../settings/settings-editor/settings-editor';
 import { AppAudioContext } from '../app-audio-context';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LabelAnalyzer } from '../label-analyzer';
-import { SuspiciousLabel } from '../suspicious-label';
 import { AudioLabel } from '../../parser/audio-label';
+import { SuspiciousLabel } from '../../label-analyzer/suspicious-label';
+import { LabelAnalyzer } from '../../label-analyzer/label-analyzer';
 
 @Component({
   selector: 'app-dashboard-sidebar',
@@ -25,8 +25,7 @@ export class DashboardSidebar {
   readonly labelGroups = this.audioContext.labelGroups;
   readonly selectedLabelCode = model<string>();
 
-  readonly labelCodes = computed(() => Array.from(this.labelGroups().keys()));
-
+  readonly labelCodes = this.audioContext.existingCodes;
 
   readonly suspectedLabels = signal<SuspiciousLabel[] | undefined>(undefined);
 

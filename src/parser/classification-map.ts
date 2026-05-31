@@ -59,28 +59,10 @@ const whistlingUnderClass: Map<string, Classification> = new Map<string, Classif
   ['2', { title: 'Whistling + Ukelele', underClassification: undefined }],
 ]);
 
-export const classifications: Map<string, Classification> = new Map<string, Classification>([
+export const sourceClassifications: Map<string, Classification> = new Map<string, Classification>([
   ['1', { title: 'Baji', underClassification: humanUnderClass }],
   ['2', { title: 'Lowji', underClassification: humanUnderClass }],
   ['3', { title: 'Environmental', underClassification: environmentUnderClass }],
   ['4', { title: 'Whistling', underClassification: whistlingUnderClass }],
   ['5', { title: 'Other Humans', underClassification: undefined }],
 ]);
-
-export const getClassification = (code: string) => {
-  if (code.length !== 3) return undefined;
-
-  const firstClass = classifications.get(code[0]);
-  if (!firstClass) return undefined;
-  if (!firstClass.underClassification)
-    return code.substring(1, 2) === '00' ? [firstClass] : undefined;
-
-  const secondClass = firstClass.underClassification.get(code[1]);
-  if (!secondClass) return undefined;
-  if (!secondClass.underClassification)
-    return code[2] === '0' ? [firstClass, secondClass] : undefined;
-
-  const thirdClass = secondClass.underClassification.get(code[2]);
-  if (!thirdClass) return undefined;
-  return [firstClass, secondClass, thirdClass];
-};

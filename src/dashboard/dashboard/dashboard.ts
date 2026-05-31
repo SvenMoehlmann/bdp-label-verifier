@@ -7,6 +7,7 @@ import { LabelPipe } from '../../ui/label-pipe';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TimestampPipe } from '../../ui/timestamp-pipe';
+import { AdjustmentExporter } from '../../label-adjustment/adjustment-exporter';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,9 @@ import { TimestampPipe } from '../../ui/timestamp-pipe';
 export class Dashboard {
   private readonly audioContext = inject(AppAudioContext);
   private readonly router = inject(Router);
-  readonly selectedLabelCode = signal<string>(this.audioContext.labelGroups().keys().next().value ?? '');
+  private readonly exporter = inject(AdjustmentExporter);
+
+  readonly selectedLabelCode = signal<string>(this.audioContext.existingCodes()[0] ?? '');
 
   readonly selectedLabelGroup = computed(() => this.audioContext.labelGroups().get(this.selectedLabelCode()))
   readonly selectedLabelId = linkedSignal<number>(() => this.selectedLabelGroup()![0].id);

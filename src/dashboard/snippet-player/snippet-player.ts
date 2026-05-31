@@ -56,15 +56,13 @@ export class SnippetPlayer {
   readonly otherLabelsInSnippet = computed(() => {
     const nearbyLabels: AudioLabel[] = [];
     if (this.settings.contextPadding() === 0 || !this.activeLabel()) return nearbyLabels;
-    for (const labelsGroup of this.audioContext.labelGroups().values()) {
-      for (const label of labelsGroup) {
-        if (label.id === this.activeLabel().id) {
-          continue;
-        }
+    for (const label of this.audioContext.existingLabels()) {
+      if (label.id === this.activeLabel().id) {
+        continue;
+      }
 
-        if (label.start < this.snippetEnd() && label.end > this.snippetStart()) {
-          nearbyLabels.push(label);
-        }
+      if (label.start < this.snippetEnd() && label.end > this.snippetStart()) {
+        nearbyLabels.push(label);
       }
     }
 

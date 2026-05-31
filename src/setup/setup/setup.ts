@@ -46,7 +46,7 @@ export class Setup {
       const labels = await this.labelParser.parseLabels(this.textFile()!);
       const buffer = await this.audioParser.decodeAudioFile(this.audioFile()!);
 
-      this.audioContext.set(buffer, labels);
+      this.audioContext.set(buffer, labels, this.audioFile()!.name, this.textFile()!.name);
       this.router.navigateByUrl('dashboard');
     } catch (err: any) {
       console.error(err);
