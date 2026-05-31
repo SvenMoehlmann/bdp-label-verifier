@@ -44,6 +44,12 @@ export class Setup {
 
     try {
       const labels = await this.labelParser.parseLabels(this.textFile()!);
+
+      if(labels.size === 0) {
+        this.error.set('No labels in label file!');
+        return;
+      }
+
       const buffer = await this.audioParser.decodeAudioFile(this.audioFile()!);
 
       this.audioContext.set(buffer, labels, this.audioFile()!.name, this.textFile()!.name);
