@@ -24,10 +24,6 @@ export class LabelAdjustmentMenu {
   itemCountMarkedAsToFix = computed(() => this.adjuster.labelsToFix().size);
   isExportable = computed(() => this.adjuster.labelReplacements().size > 0 || this.adjuster.labelsToFix().size > 0);
 
-  constructor() {
-    effect(() => console.log(this.isMarkedFixable()));
-  }
-
   toogleToFix(ev?: Event) {
     if(ev) {
       ev.preventDefault();

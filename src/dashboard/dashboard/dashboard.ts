@@ -34,8 +34,6 @@ export class Dashboard {
     effect(() => {
       if(!this.selectedLabel() || this.selectedLabelId() === this.selectedLabel().id) return;
       this.selectedLabelId.set(this.selectedLabel().id);
-
-      console.log('selectedLabelId changed to ', this.selectedLabelId());
     })
   }
 

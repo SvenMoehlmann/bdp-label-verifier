@@ -118,8 +118,6 @@ export class SnippetPlayer {
     }
 
     const newLabel = this.audioLabels()[newIndex];
-    console.log('Setting:', newLabel)
-
     this.selectedLabel.set(newLabel);
   }
 }
