@@ -64,4 +64,9 @@ export class LabelAdjuster {
       return newSet;
     });
   }
+
+  reset() {
+    this._labelReplacements.set(new Map());
+    this._labelsToFix.set(new Set());
+  }
 }

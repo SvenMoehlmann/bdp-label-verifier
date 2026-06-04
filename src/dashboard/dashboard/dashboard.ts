@@ -1,3 +1,4 @@
+import { LabelAdjuster } from './../../label-adjustment/label-adjuster';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
 import { DashboardSidebar } from "../dashboard-sidebar/dashboard-sidebar";
 import { AppAudioContext } from '../app-audio-context';
@@ -19,8 +20,8 @@ import { LabelAdjustmentMenu } from '../../label-adjustment/label-adjustment-men
 })
 export class Dashboard {
   private readonly audioContext = inject(AppAudioContext);
+  private readonly labelAdjuster = inject(LabelAdjuster);
   private readonly router = inject(Router);
-  private readonly exporter = inject(AdjustmentExporter);
 
   readonly selectedLabelCode = signal<string>(this.audioContext.existingCodes()[0] ?? '');
 
@@ -45,6 +46,7 @@ export class Dashboard {
 
   reset() {
     this.audioContext.reset();
+    this.labelAdjuster.reset();
 
     this.router.navigateByUrl('/');
   }
