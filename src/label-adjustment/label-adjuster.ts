@@ -66,7 +66,7 @@ export class LabelAdjuster {
   }
 
   reset() {
-    this._labelReplacements.set(new Map());
-    this._labelsToFix.set(new Set());
+    this._labelReplacements.set(new Map<number, string>());
+    this._labelsToFix.set(new Set<number>());
   }
 }
